@@ -1,29 +1,40 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun  8 17:06:38 2024
+import psycopg2
 
-@author: roger
-"""
-from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
+# Configurações de conexão ao banco de dados
+conn_params = {
+    'dbname': 'Database_DataAcquisitionApp',    # Nome do banco de dados
+    'user': 'my_app_user',                      # Nome do usuário
+    'password': '12345678',                      # Senha do usuário
+    'host': '127.0.0.1',                         # Endereço do servidor do banco de dados
+    'port': '5432'                              # Porta do servidor do banco de dados
+}
 
-class DatabaseClient:
-    def __init__(self):
+# Função para conectar ao banco de dados e executar a consulta
+def query_table_mqtt():
+    try:
+        # Conectar ao banco de dados
+        conn = psycopg2.connect(**conn_params)
+        cursor = conn.cursor()
 
-        # Configurações do InfluxDB
-        token = "your_influxdb_token"  # Substitua pelo seu token
-        org = "your_organization"  # Substitua pelo nome da sua organização
-        bucket = "MqttBroker"
+        # Consulta SQL
+        query = """SELECT broker_name, broker_ip, broker_porta FROM "TABLE_MQTT";"""
 
-        # Criar uma instância do cliente
-        client = InfluxDBClient(url="http://localhost:8086", token=token)
-        write_api = client.write_api(write_options=SYNCHRONOUS)
+        # Executar a consulta
+        cursor.execute(query)
 
-        
-    def connect:
-        
-        
-    def disconnect:
+        # Buscar os resultados
+        results = cursor.fetchall()
+
+        # Exibir os resultados
+        for row in results:
+            print(f"Broker Name: {row[0]}, Broker IP: {row[1]}, Broker Porta: {row[2]}")
+
+        # Fechar o cursor e a conexão
+        cursor.close()
+        conn.close()
+
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
         
         
     
