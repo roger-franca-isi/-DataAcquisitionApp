@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import ttkbootstrap as tb
+
 from GraficalInterface.ui_main import MainUI
 from GraficalInterface.ui_mqtt import MqttUI
 from GraficalInterface.ui_sensors import SensorUI
@@ -53,9 +54,3 @@ class ModernApp:
 
         # Mostra o frame selecionado
         self.frames[frame_name].show()
-
-def create_app():
-    root = tb.Window(themename="cyborg")
-    root.geometry("1920x1080")  # Define a janela para ser full HD
-    app = ModernApp(root)
-    return root

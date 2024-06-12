@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import sql
 
 # Configurações de conexão ao banco de dados
 conn_params = {
@@ -9,8 +10,30 @@ conn_params = {
     'port': '5432'                              # Porta do servidor do banco de dados
 }
 
+# Função para salvar os dados no banco de dados
+def save_broker_data(broker_name, broker_ip, broker_port):
+    try:
+        conn = psycopg2.connect(**conn_params)
+        cursor = conn.cursor()
+        
+        insert_query = sql.SQL("""
+            INSERT INTO "TABLE_MQTT" (broker_name, broker_ip, broker_porta)
+            VALUES (%s, %s, %s)
+        """)
+        
+        cursor.execute(insert_query, (broker_name, broker_ip, broker_port))
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+    
+    except Exception as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        return False
+    
 # Função para conectar ao banco de dados e executar a consulta
-def query_table_mqtt():
+def query_broker_data():
     try:
         # Conectar ao banco de dados
         conn = psycopg2.connect(**conn_params)
@@ -32,9 +55,12 @@ def query_table_mqtt():
         # Fechar o cursor e a conexão
         cursor.close()
         conn.close()
-
+        
+        return row[1], row[2]
+    
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
+        
         
         
     

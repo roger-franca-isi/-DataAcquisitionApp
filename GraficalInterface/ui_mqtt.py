@@ -40,11 +40,21 @@ class MqttUI:
         self.mqtt_connect_broker_button.state(['disabled'])
 
     def save_broker(self):
-        print("Salvar informacoes no banco de daos!")
-        self. mqtt_connect_broker_button.state(['!disabled'])
+        print("ui_mqtt - Salvar informacoes no banco de dados!")
+        mqtt_name = self.mqtt_name_entry.get()
+        mqtt_ip = self.mqtt_ip_entry.get()
+        mqtt_port = self.mqtt_port_entry.get()
+  
+        self.save_callback(mqtt_name,  mqtt_ip, mqtt_port)
+        
+        self.mqtt_connect_broker_button.state(['!disabled'])
             
     def connect_broker(self):
         print("Disparar comando de conectar com o broker")
+        mqtt_ip = self.mqtt_ip_entry.get()
+        mqtt_port = self.mqtt_port_entry.get()
+        self.connect_callback(mqtt_ip, mqtt_port);
+        
         self.mqtt_name_entry.configure(state='readonly')
         self.mqtt_ip_entry.configure(state='readonly')
         self.mqtt_port_entry.configure(state='readonly')
@@ -54,6 +64,7 @@ class MqttUI:
 
     def disconnect_broker(self):
         print("Disparar comando de desconectar com o broker")
+        self.disconnect_callback()
         self.mqtt_name_entry.configure(state='normal')
         self.mqtt_ip_entry.configure(state='normal')
         self.mqtt_port_entry.configure(state='normal')
@@ -67,4 +78,22 @@ class MqttUI:
     def hide(self):
         self.frame.pack_forget()
     
-    
+    def set_callback_save_button(self, callback):
+        self.save_callback = callback
+        
+    def set_callback_connect_button(self, callback):
+        self.connect_callback = callback
+
+    def set_callback_disconnect_button(self, callback):
+        self.disconnect_callback = callback
+            
+    def insert_form_data(self, broker_name, broker_ip, broker_port):
+        self.mqtt_name_entry.delete(0, tk.END)
+        self.mqtt_name_entry.insert(0, broker_name)
+        
+        self.mqtt_ip_entry.delete(0, tk.END)
+        self.mqtt_ip_entry.insert(0, broker_ip)
+        
+        self.mqtt_port_entry.delete(0, tk.END)
+        self.mqtt_port_entry.insert(0, broker_port)
+        
