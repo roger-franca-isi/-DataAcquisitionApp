@@ -45,7 +45,7 @@ class MqttUI:
         mqtt_ip = self.mqtt_ip_entry.get()
         mqtt_port = self.mqtt_port_entry.get()
   
-        self.save_callback(mqtt_name,  mqtt_ip, mqtt_port)
+        self.save_callback(mqtt_name, mqtt_ip, mqtt_port)
         
         self.mqtt_connect_broker_button.state(['!disabled'])
             
@@ -88,12 +88,14 @@ class MqttUI:
         self.disconnect_callback = callback
             
     def insert_form_data(self, broker_name, broker_ip, broker_port):
-        self.mqtt_name_entry.delete(0, tk.END)
-        self.mqtt_name_entry.insert(0, broker_name)
+        if broker_name is not None:        
+            self.mqtt_name_entry.delete(0, tk.END)
+            self.mqtt_name_entry.insert(0, broker_name)
+            
+            self.mqtt_ip_entry.delete(0, tk.END)
+            self.mqtt_ip_entry.insert(0, broker_ip)
+            
+            self.mqtt_port_entry.delete(0, tk.END)
+            self.mqtt_port_entry.insert(0, broker_port)
         
-        self.mqtt_ip_entry.delete(0, tk.END)
-        self.mqtt_ip_entry.insert(0, broker_ip)
-        
-        self.mqtt_port_entry.delete(0, tk.END)
-        self.mqtt_port_entry.insert(0, broker_port)
-        
+            self.mqtt_connect_broker_button.state(['!disabled'])
