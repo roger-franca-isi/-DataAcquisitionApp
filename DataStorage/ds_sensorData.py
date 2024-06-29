@@ -3,7 +3,7 @@ from psycopg2 import sql
 
 from DataStorage.ds_interface import DatabaseInterface
 
-class SensorsDatabase(DatabaseInterface):
+class SensorDataStream(DatabaseInterface):
     def __init__(self):
         # Configurações de conexão ao banco de dados
         self.conn_params = {
@@ -18,14 +18,7 @@ class SensorsDatabase(DatabaseInterface):
         try:
             conn = psycopg2.connect(**self.conn_params)
             cursor = conn.cursor()
-            
-            insert_query = sql.SQL("""
-                INSERT INTO "table_sensor" (sensor_tag, sensor_implement, sensor_data, sensor_unit)
-                VALUES (%s, %s, %s, %s)
-            """)
-            
-            cursor.execute(insert_query, (sensor_tag, sensor_implement, sensor_data, sensor_unit))
-            
+                        
             conn.commit()
             cursor.close()
             conn.close()
@@ -41,26 +34,9 @@ class SensorsDatabase(DatabaseInterface):
             conn = psycopg2.connect(**self.conn_params)
             cursor = conn.cursor()
     
-            # Consulta SQL
-            query = """SELECT sensor_tag, sensor_implement, sensor_data, sensor_unit  
-                FROM "table_sensor";"""
-    
-            # Executar a consulta
-            cursor.execute(query)
-    
-            # Buscar os resultados
-            results = cursor.fetchall()
-    
-            # Exibir os resultados
-            #for row in results:
-            #    print(f"Broker Name: {row[0]}, Broker IP: {row[1]}, Broker Porta: {row[2]}")
-    
-            # Fechar o cursor e a conexão
             cursor.close()
             conn.close()
-            
-            return results
-        
+                    
         except Exception as e:
             print(f"Ocorreu um erro: {e}")
             
@@ -68,14 +44,7 @@ class SensorsDatabase(DatabaseInterface):
         try:
             conn = psycopg2.connect(**self.conn_params)
             cursor = conn.cursor()
-            
-            delete_query = sql.SQL("""
-                DELETE FROM "table_sensor"
-                WHERE sensor_tag = %s
-            """)
-            
-            cursor.execute(delete_query, (sensor_tag,))
-            
+                        
             conn.commit()
             cursor.close()
             conn.close()

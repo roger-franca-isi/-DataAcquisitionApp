@@ -1,8 +1,30 @@
+import json
+
 class Sensor:
-    def __init__(self, sensor_tag, sensor_implement, sensor_data1, sensor_unit1):
+    def __init__(self, sensor_tag, sensor_implement, sensor_data, sensor_unit):
         self.sensor_tag = sensor_tag
         self.sensor_implement = sensor_implement
-        self.sensor_data1 = sensor_data1
-        self.sensor_unit1 = sensor_unit1
-        self.topicMqtt = f"Projeto/{self.sensor_implement}/{self.sensor_tag}"
+        self.sensor_data = sensor_data
+        self.sensor_unit = sensor_unit
+        self.topicMqtt = f"Projeto/{self.sensor_implement}/{self.sensor_tag}/uplink"
+        
+    def process_data_received(self, client, userdata, message):
+        try:
+            # Decodificar o payload JSON
+            payload = json.loads(message.payload.decode('utf-8'))
+            
+            # Buscar a variável desejada (self.sensor_data)
+            self.sensor_data_value = payload.get(str(self.sensor_data))
+            
+            if self.sensor_data_value is not None:
+                self.callback_save_value(self.sensor_tag, self.sensor_data)
+            else:
+                print("Variável 'sensor_data' não encontrada no payload JSON.")
+        
+        except Exception as e:
+            print(f"Erro ao processar mensagem: {e}")     
+            
+    def set_callback_save_value(self, callback):
+        self.callback_save_value = callback
+        
 

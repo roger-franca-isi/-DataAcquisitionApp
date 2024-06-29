@@ -7,12 +7,7 @@ class MyMqtt:
 
         # Atribuição das funções de callback
         self.client.on_connect = self.callback_on_connect
-        self.client.on_message = self.callback_on_message
-        self.client.on_publish = self.callback_on_publish
-
-        # Lista para armazenar tópicos e seus callbacks
-        self.topics_callbacks = {}
-        
+       
     def connectToBroker(self, broker_address, broker_port):
         self.broker_address = str(broker_address)
         self.broker_port = int(broker_port)
@@ -31,10 +26,10 @@ class MyMqtt:
 
     # Função para assinar um tópico e associar um callback
     def subscribe(self, topic, callback):
+        self.client.message_callback_add(topic, callback)
         self.client.subscribe(topic)
-        self.topics_callbacks[topic] = callback
             
-    # Função callback quando o cliente se conecta ao broker
+    # Callback quando o cliente se conecta ao broker MQTT
     def callback_on_connect(self, client, userdata, flags, rc):
         
         self.client.publish("test/topic", "Hello, MQTT!")
@@ -46,13 +41,4 @@ class MyMqtt:
         else:
             print(f"Falha na conexão. Código de retorno: {rc}")
     
-    # Função callback quando uma mensagem é recebida do broker
-    def callback_on_message(self, client, userdata, msg):
-        print(f"Mensagem recebida no tópico {msg.topic}: {msg.payload.decode()}")
-        if msg.topic in self.topics_callbacks:
-            self.topics_callbacks[msg.topic](msg.payload.decode())
-        
-    # Função callback quando a mensagem é publicada
-    def callback_on_publish(self, client, userdata, mid):
-        print("Mensagem publicada com sucesso")
 

@@ -56,17 +56,16 @@ class SensorUI:
         sensor_unit1 = self.sensor_unit1_combobox.get()
 
         self.save_callback(sensor_tag, sensor_implement, sensor_data1, sensor_unit1);
-        self.sensor_listbox.insert(tk.END, sensor_tag)
+        self.sensor_listbox.insert(tk.END, str(sensor_tag))
 
-    def delete_sensor(self):
-        sensor_tag = self.sensor_tag_entry.get()
-        self.delete_callback(sensor_tag)
-        
+    def delete_sensor(self):     
         selected = self.sensor_listbox.curselection()
         
         if selected:
+            sensor_tag = self.sensor_listbox.get(selected)
+            self.delete_callback(str(sensor_tag))
             self.sensor_listbox.delete(selected)
-            print("Sensor excluído!")
+            print(f'Sensor excluído = {sensor_tag}')
 
     def show(self):
         self.frame.pack(fill=tk.BOTH, expand=True)
@@ -74,8 +73,8 @@ class SensorUI:
     def hide(self):
         self.frame.pack_forget()
         
-    def set_callback_insert_sensor(self):
-        return
+    def insert_sensor_list(self, sensor_tag):
+        self.sensor_listbox.insert(tk.END, str(sensor_tag))
     
     def set_callback_save_button(self, callback):
         self.save_callback = callback
