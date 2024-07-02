@@ -1,16 +1,24 @@
 from Sensor.sensor import Sensor
-from Mqtt.mqtt_broker import MyMqtt
-from typing import List
 
 class SensorRun:
-    def __init__(self, sensors :List[Sensor], mqtt_broker :MyMqtt, database_sensors):
-        self.sensors = sensors
-        self.mqtt_broker = mqtt_broker
-        self.database_sensors = database_sensors
+    def __init__(self):
+        self.sensors = []
+
+    def add_sensor(self, sensor):
+        # Adiciona um sensor à lista de sensores
+        self.sensors.append(sensor)
+        
+    def set_data_storage_callback(self, callback):
+        self.storage_callback = callback
+
+    def set_mqtt_subscribe_callback(self, callback):
+        self.subscribe_callback = callback
         
     def run(self):
         for sensor in self.sensors:
-            self.mqtt_broker.subscribe(sensor.topicMqtt, self.process_sensor)
+            callback_instance = self.storage_callback
+            sensor.set_callback_save_value(callback_instance)
+            self.subscribe_callback(sensor.topicMqtt, sensor.process_data_received)
 
-    def process_sensor(self):
-        # Exemplo de processamento: imprimir informações do sensor
+    def stop(self):
+        self.sensors.clear()

@@ -25,7 +25,8 @@ class SensorsDatabase(DatabaseInterface):
             """)
             
             cursor.execute(insert_query, (sensor_tag, sensor_implement, sensor_data, sensor_unit))
-            
+            print(f"SensorDatabase - Salvo no Banco de dados")
+
             conn.commit()
             cursor.close()
             conn.close()
