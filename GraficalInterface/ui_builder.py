@@ -15,7 +15,7 @@ class ModernApp:
         
         # Configuração da grid
         self.root.columnconfigure(0, weight=1)
-        self.root.columnconfigure(1, weight=4)
+        self.root.columnconfigure(1, weight=25)
         self.root.rowconfigure(0, weight=1)
         
         # Frame de Navegação
