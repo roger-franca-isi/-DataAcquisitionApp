@@ -45,8 +45,8 @@ if __name__ == "__main__":
     app.frames["SensorUI"].set_callback_delete_button(instance_function_sensor_delete_data)
     
     # Callback interface grafica de visualizacao
-
-
+    instance_function_get_datastream = mySensorDataStream.fetch_data
+    app.frames["ShowGraphUI"].set_callback_fetch_data(instance_function_get_datastream)
 
     # Funcoes de Inicialização do sistema
     
@@ -58,6 +58,9 @@ if __name__ == "__main__":
     instance_function_subscriber_boker = myMqtt.subscribe
     myRunSensors.set_mqtt_subscribe_callback(instance_function_subscriber_boker)
 
+    instance_function_unsubscriber_boker = myMqtt.unsubscribe
+    myRunSensors.set_mqtt_unsubscribe_callback(instance_function_unsubscriber_boker)
+    
     instance_function_storage_data_stream = mySensorDataStream.save_data
     myRunSensors.set_data_storage_callback(instance_function_storage_data_stream)
 
@@ -65,8 +68,9 @@ if __name__ == "__main__":
     all_sensor_in_database = sensorDatabase.fetch_data()
 
     for sensorUnit in all_sensor_in_database:
-        #Inseri todos os sensores na lista dos 
+        #Inseri todos os sensores na lista da UI de Sensores e ShowGraph
         app.frames["SensorUI"].insert_sensor_list(sensorUnit[0])
+        app.frames["ShowGraphUI"].insert_sensor(sensorUnit[0])
         print(f"sensor_tag: {sensorUnit[0]}, sensor_implement: {sensorUnit[1]}, sensor_data: {sensorUnit[2]}, sensor_unit: {sensorUnit[3]}")
         
         #Adiciona todos os sensors no run_sensors

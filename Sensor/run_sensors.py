@@ -13,6 +13,9 @@ class SensorRun:
 
     def set_mqtt_subscribe_callback(self, callback):
         self.subscribe_callback = callback
+
+    def set_mqtt_unsubscribe_callback(self, callback):
+        self.unsubscribe_callback = callback
         
     def run(self):
         for sensor in self.sensors:
@@ -21,4 +24,5 @@ class SensorRun:
             self.subscribe_callback(sensor.topicMqtt, sensor.process_data_received)
 
     def stop(self):
-        self.sensors.clear()
+        for sensor in self.sensors:
+            self.unsubscribe_callback(sensor.topicMqtt)

@@ -24,12 +24,14 @@ class MyMqtt:
     def disconnectToBroker(self):
        self.client.disconnect()    
 
-    # Função para assinar um tópico e associar um callback
     def subscribe(self, topic, callback):
         self.client.message_callback_add(topic, callback)
         self.client.subscribe(topic)
+
+    def unsubscribe(self, topic):
+        self.client.message_callback_remove(topic)
+        self.client.unsubscribe(topic) 
             
-    # Callback quando o cliente se conecta ao broker MQTT
     def callback_on_connect(self, client, userdata, flags, rc):
         
         self.client.publish("test/topic", "Hello, MQTT!")

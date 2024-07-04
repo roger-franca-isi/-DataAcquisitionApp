@@ -51,9 +51,6 @@ class ShowGraphUI:
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        # Exemplo de gráfico
-        self.plot_example_graph()
-
     def on_double_click(self, event):
         # Obtém o índice do item clicado duas vezes
         selection = self.listbox.curselection()
@@ -61,22 +58,28 @@ class ShowGraphUI:
         if selection:
             index = selection[0]
             value = self.listbox.get(index)
-            print(f"Item duplo clicado: {value}")
-            # Aqui você pode adicionar a lógica que deseja executar ao clicar duas vezes no item
-            self.plot_example_graph()
+            self.dataToPlot = self.callback_fetch_data(value, 100)
+ 
+            if self.dataToPlot:
+                # Extraindo os valores de x (timestamp) e y (sensor_value)
+                x = [record[1] for record in self.dataToPlot]  # timestamps
+                y = [record[0] for record in self.dataToPlot]  # sensor_values
             
-    def plot_example_graph(self):
-        # Dados de exemplo
-        x = [1, 2, 3, 4, 5]
-        y = [1, 4, 2, 5, 3]
-
-        # Plotando no gráfico
-        self.ax.plot(x, y)
-        self.canvas.draw()
+                # Plotando no gráfico
+                self.ax.clear()  # Limpar gráfico anterior
+                self.ax.plot(x, y)
+                self.ax.set_xlabel('Timestamp')
+                self.ax.set_ylabel('Sensor Value')
+                self.ax.set_title('Sensor Data Plot')
+                self.fig.autofmt_xdate()  # Formatar datas no eixo x
+                self.canvas.draw()
 
     def insert_sensor(self, sensor_tag):
         self.listbox.insert(tk.END, sensor_tag)
 
+    def set_callback_fetch_data(self, callback):
+        self.callback_fetch_data = callback
+        
     def show(self):
         self.frame.pack(fill=tk.BOTH, expand=True)
 

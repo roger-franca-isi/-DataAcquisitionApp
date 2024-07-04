@@ -8,7 +8,7 @@ class MainUI:
         self.frame = ttk.Frame(parent, padding="10")
         self.frame.pack(fill=tk.BOTH, expand=True)
 
-        label = ttk.Label(self.frame, text="Bem-vindo à aplicação!", style="primary.TLabel")
+        label = ttk.Label(self.frame, text="Sistema de Aquisição de Dados 4.0!", style="primary.TLabel")
         label.pack(expand=True)
 
         # Frame para os botões
